@@ -147,7 +147,7 @@ class CreateProfileView(CreateView):
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     """
     A class inherits from the CreateView django generic view
-    handles request to URL /mini_fb/profile/<int:pk>/create_status
+    handles request to URL /mini_fb/status/create_status
     on GET: return a form to create a StatusMessage instance
     on POST: validate the form, save data and redirect to the Profile detail view
     """

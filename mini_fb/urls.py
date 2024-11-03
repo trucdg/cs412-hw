@@ -12,14 +12,14 @@ urlpatterns = [
     ),
     path(r"create_profile/", views.CreateProfileView.as_view(), name="create_profile"),
     path(
-        r"profile/create_status/",
-        views.CreateStatusMessageView.as_view(),
-        name="create_status",
-    ),
-    path(
         r"profile/update/",
         views.UpdateProfileView.as_view(),
         name="update_profile",
+    ),
+    path(
+        r"status/create_status/",
+        views.CreateStatusMessageView.as_view(),
+        name="create_status",
     ),
     path(
         r"status/<int:pk>/delete/",
