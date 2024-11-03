@@ -13,6 +13,7 @@
             {% csrf_token %}
             <!-- Render the form fields as table -->
             <table class="profile-form-table">
+                {{user_creation_form.as_table}}
                 {{ form.as_table }}
             </table>
             <!-- Submit button -->

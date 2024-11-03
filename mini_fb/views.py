@@ -16,10 +16,9 @@ from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
-
-
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -92,6 +91,27 @@ class CreateProfileView(CreateView):
         print(f"CreateProfileView.form_valid(): form={form.cleaned_data}")
         print(f"CreateProfileView.form_valid(): self.kwargs={self.kwargs}")
 
+        # reconstruct the UserCreationForm using the POST data
+        user_creation_form = UserCreationForm(self.request.POST)
+
+        if user_creation_form.is_valid():
+
+            # create the user and login
+            user = user_creation_form.save()
+
+            print(f"CreateProfileView.form_valid(): Created user={user}")
+
+            # login
+            login(self.request, user)
+            print(f"CreateProfileView.form_valid(): User is logged in.")
+
+            # Attach the user to the Profile instance object
+            form.instance.user = user
+
+        # If user_form is invalid, print the errors for debugging
+        print(user_creation_form.errors)
+
+        # Delegate the rest to the superclass
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -107,6 +127,21 @@ class CreateProfileView(CreateView):
         return the URL to redirect on success
         """
         return reverse("mini_fb:show_profile", kwargs={"pk": self.object.pk})
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """
+        provides context data to the template
+        """
+
+        # first, call the superclass method to get the context variable
+        context = super().get_context_data(**kwargs)
+
+        # create an instance of the UserCreationForm
+        context["user_creation_form"] = (
+            UserCreationForm()
+        )  # Add UserCreationForm to the context
+
+        return context
 
 
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
