@@ -1,0 +1,28 @@
+<!-- mini_fb/templates/mini_fb/create_profile_form.html -->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+    <div class="profile-form-container">
+        <h1> Create a New Profile </h1>
+
+        <!-- Display the form in the table layout -->
+        <!-- since the view is connected to the URL /profile/create_profile 
+             we don't need to specify form action -->  
+         <form method="POST"> 
+            {% csrf_token %}
+            <!-- Render the form fields as table -->
+            <table class="profile-form-table">
+                {{ form.as_table }}
+            </table>
+            <!-- Submit button -->
+            <button type="submit" class="create-profile-submit-btn">Create Profile</button>
+         </form>
+
+         <!-- Cancel button -->
+        <form method="GET" action="{% url 'mini_fb:show_all_profiles_view' %}">
+            <button type="submit" class="create-profile-submit-btn">Cancel</button>
+        </form>
+         
+    </div>
+{% endblock %}

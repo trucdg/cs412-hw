@@ -1,0 +1,27 @@
+<!-- mini_fb/templates/mini_fb/login.html -->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+    <div class="login-container">
+        <h2 class="login-title">Login</h2>
+      
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+
+            <input type="submit" name="submit" value="Login" class="login-button">
+
+            <!-- if there is a specified page to go to next, go there 
+                else, go to show all page 
+            -->
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% else %}
+                <input type="hidden" name="next" value="{% url 'mini_fb:show_all_profiles_view' %}">
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

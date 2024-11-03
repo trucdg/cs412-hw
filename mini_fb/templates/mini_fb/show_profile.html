@@ -1,0 +1,105 @@
+<!-- templates/mini_fb/show_profile.html -->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+
+<div class="profile-detail-container">
+    <div class="profile-detail-image-container">
+        <img class="profile-detail-image" src="{{ profile.image_url }}" alt="{{ profile.first_name }} {{ profile.last_name }}">
+    </div>
+
+    <!-- Table layout for profile details -->
+    <table class="profile-detail-table">
+        <tr>
+            <th>First Name</th>
+            <td>{{ profile.first_name }}</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>{{ profile.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ profile.email }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ profile.city }}</td>
+        </tr>
+    </table>
+
+        <!-- If AUTHENTICATED: allow updating the profile and friend suggestion -->
+        {% if request.user.is_authenticated and request.user == profile.user %}
+        <a href="{% url 'mini_fb:update_profile' %}" class="simple-btn">Update Profile</a>
+        <a href="{% url 'mini_fb:friend_suggestions' %}" class="simple-btn">Friend Suggestions</a>
+        {% else %}
+        <p> NOT YOUR PAGE. CANNOT UPDATE </p>
+        {% endif %}
+
+    <!-- Section for displaying friends -->
+    <div class="profile-friends-container">
+        <h3> {{ profile.first_name }}'s Friends:</h3>
+        {% if profile.get_friends %}
+            <div class="friends-list">
+                {% for friend in profile.get_friends %}
+                    <div class="friend-container">
+                        <a href="{% url 'mini_fb:show_profile' friend.pk %}">
+                            <img src="{{ friend.image_url }}" alt="{{ friend.first_name }} image" class="friend-image">
+                            <p class="friend-name">{{ friend.first_name }} {{ friend.last_name }}</p>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No partners in crime... yet!</p>
+            <p>Accepting applications - email me your resume...</p>
+        {% endif %}
+    </div>
+
+
+    <!-- Section for displaying status messages -->
+    <div class="status-messages-container">
+        <h3>Status Messages:</h3>
+        {% if request.user.is_authenticated and request.user == profile.user %}
+            <a href="{% url 'mini_fb:create_status' %}" class="create-status-button"> Create Status </a>
+        {% endif %}
+
+        {% if profile.get_status_messages %}
+            <ul class="status-messages-list">
+                {% for message in profile.get_status_messages %}
+                    <li class="status-message-item">
+                        <p class="status-message">{{ message.message }}</p>
+                        <span class="status-timestamp">{{ message.timestamp|date:"F j, Y, g:i a" }}</span>
+
+                        <!-- Displaying images -->
+                         {% if message.get_images %}
+                            <div class="status-images">
+                                {% for img in message.get_images %}
+                                    <img src="{{ img.image_file.url }}" alt="{{ image.image_file.url }}">
+                                {% endfor %}
+                            </div>
+                         {% endif %}
+                        
+                        <br>
+
+                        {% if request.user.is_authenticated and request.user == profile.user %}
+                        <a href="{% url 'mini_fb:update_status' message.pk %}" class="simple-btn">Update</a>
+                        <a href="{% url 'mini_fb:delete_status' message.pk %}" class="simple-btn">Delete</a>
+                        {% endif %}
+
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p> No tales to tell just yet! But stay tuned ...!</p>
+        {% endif %}
+
+    </div>
+
+    <div class="profile-detail-actions">
+        <a href="{% url 'mini_fb:show_all_profiles_view' %}" class="profile-detail-button">Back to All Profiles</a>
+    </div>
+</div>
+
+{% endblock %}

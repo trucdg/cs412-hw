@@ -1,0 +1,31 @@
+<!-- mini_fb/templates/mini_fb/create_status_form.html -->
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+
+<div class="create-status-container">
+    <h2 class="create-status-heading">Create A Status for {{ profile.first_name }} {{ profile.last_name }}</h2>
+
+    <form method="POST" class="create-status-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="create-status-table">
+            {{ form.as_table }}
+            
+            <!-- Input field for uploading images -->
+            <tr>
+                <td colspan="2"> <!-- Makes the label span across both columns -->
+                    <label for="files">Upload Images:</label>
+                    <input type="file" name="files" id="files" multiple /> <!-- Allows multiple uploads -->
+                </td>
+            </tr>
+        </table>
+
+        <button type="submit" class="submit-btn">Create Status</button>
+    </form>
+
+    <form method="GET" action="{% url 'mini_fb:show_profile' profile.pk %}" class="cancel-form">
+        <button type="submit" class="cancel-btn">Cancel</button>
+    </form>
+</div>
+
+{% endblock %}

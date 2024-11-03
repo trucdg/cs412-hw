@@ -1,0 +1,23 @@
+<!-- quotes/templates/quotes/show_all.html -->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    
+    <!-- Display all quotes in a list -->
+    <div>
+        <h2>All Quotes by Barack Obama</h2>
+        <ul>
+            {% for quote in quotes %}
+                <li>{{ quote }}</li>
+            {% endfor %}
+        </ul>
+        <!-- Display all images in a list -->
+        <h2>All Quotes by Barack Obama</h2>
+        <ul>
+            {% for image in images %}
+                <li><img src="{{ image }}" alt="Famous Person Image"></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

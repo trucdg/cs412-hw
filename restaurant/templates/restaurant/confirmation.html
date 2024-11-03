@@ -1,0 +1,55 @@
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+
+<div class="confirmation-container">
+    <h2>Order Confirmation</h2>
+
+    <!-- Customer Information -->
+    <div class="customer-info">
+        <h3>Customer Information</h3>
+        <p><strong>Name:</strong> {{ customer_name }}</p>
+        <p><strong>Phone:</strong> {{ customer_phone }}</p>
+        <p><strong>Email:</strong> {{ customer_email }}</p>
+    </div>
+
+    <!-- Ordered Dishes -->
+    <h3>Ordered Dishes</h3>
+    <ul>
+        {% for item in selected_items %}
+        <li>{{ item }}</li>
+        {% empty %}
+        <li>No items selected.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Selected Toppings (if any) -->
+    {% if selected_toppings %}
+    <h3>Selected Toppings</h3>
+    <ul>
+        {% for topping in selected_toppings %}
+        <li>{{ topping }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Special Instructions -->
+    {% if special_instructions %}
+    <h3>Special Instructions</h3>
+    <p>{{ special_instructions }}</p>
+    {% endif %}
+
+    <!-- Total Price -->
+    <p class="total-price">Total Price: ${{ total_price }}</p>
+
+    <!-- Ready Time -->
+    <p class="ready-time">Your order will be ready by {{ ready_time }}</p>
+
+    <!-- Order Time -->
+    <p class="order-time">Order Time: {{ current_time }}</p>
+
+    <!-- Return to Menu Button -->
+    <a href="{% url 'restaurant:main' %}">Return to Menu</a>
+</div>
+
+{% endblock %}
