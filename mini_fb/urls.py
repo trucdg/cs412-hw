@@ -54,7 +54,7 @@ urlpatterns = [
     ),
     path(
         r"logout/",
-        auth_views.LogoutView.as_view(template_name="mini_fb/logout.html"),
+        auth_views.LogoutView.as_view(template_name="mini_fb/logged_out.html"),
         name="logout",
     ),
 ]
