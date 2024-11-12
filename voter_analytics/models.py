@@ -61,7 +61,7 @@ def load_data():
     f.readline()  # discard headers
 
     for line in f:
-        line = f.readline().strip()
+        line = line.strip()
         fields = line.split(",")
 
         # print(fields)
@@ -74,12 +74,14 @@ def load_data():
                 first_name=fields[2].strip(),
                 # Residential address
                 residential_addr_street_number=fields[3].strip(),
-                residential_addr_street_name=fields[4],
-                residential_addr_apartment_number=fields[5] if fields[5] else None,
-                residential_addr_zip_code=fields[6],
+                residential_addr_street_name=fields[4].strip(),
+                residential_addr_apartment_number=(
+                    fields[5].strip() if fields[5] else None
+                ),
+                residential_addr_zip_code=fields[6].strip(),
                 # Voter details
-                date_of_birth=fields[7],
-                date_of_registration=fields[8],
+                date_of_birth=fields[7].strip(),
+                date_of_registration=fields[8].strip(),
                 party_affiliation=fields[9].strip(),
                 precinct_number=fields[10].strip(),
                 # Convert boolean fields for voting history fields
@@ -89,7 +91,7 @@ def load_data():
                 v22general=fields[14].strip().upper() == "TRUE",
                 v23town=fields[15].strip().upper() == "TRUE",
                 # Scoring
-                voter_score=int(fields[16]),
+                voter_score=int(fields[16].strip()),
             )
 
             # save to db
