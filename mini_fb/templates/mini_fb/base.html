@@ -1,0 +1,56 @@
+<!-- 
+mini_fb/templates/mini_fb/base.html 
+-->
+
+{% load static %}
+
+<html>
+    <head>
+        <tittle> Mini Facebook | CS412 </tittle>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+
+        <header>
+            <h1>Mini Facebook</h1>
+        </header>
+
+        <nav>
+            <h3 style="color: #4a90e2; font-size: 1.5em; font-weight: 600; text-align: center; margin: 20px 0; border-bottom: 2px solid #4a90e2; padding-bottom: 5px;">
+                {% if request.user.is_authenticated %}
+                    {{ request.user }} IS LOGGED IN 
+                {% else %}
+                    NOT LOGGED IN
+                {% endif %}
+            </h3>
+            <ul>
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'mini_fb:show_all_profiles_view' %}"> All Profiles</a></li>
+                    <li><a href="{% url 'mini_fb:show_profile_for_user' %}"> Show Profile</a></li>
+                    <li><a href="{% url 'mini_fb:show_newsfeed' %}"> News Feed</a></li>
+                    <li>
+                        <form method="post" action="{% url 'mini_fb:logout' %}" style="display:inline; font-size: bold;" >
+                            {% csrf_token %}
+                            <button type="submit" class="logout-button" style="background: none; color: white; border: none; font: inherit">Logout</button>
+                        </form>
+                    </li>
+                    
+                {% else %}
+                    <li><a href="{% url 'mini_fb:show_all_profiles_view' %}"> All Profiles</a></li>
+                    <li><a href="{% url 'mini_fb:login' %}"> Login </a></li>
+                    <li><a href="{% url 'mini_fb:create_profile' %}"> Create a Profile</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+
+        {% block content %}
+
+        {% endblock %}
+
+        <footer>
+            <p>Mini Facebook &copy; 2024</p>
+        </footer>
+
+    </body>
+</html>

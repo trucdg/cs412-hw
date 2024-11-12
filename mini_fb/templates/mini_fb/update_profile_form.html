@@ -1,0 +1,20 @@
+<!-- mini_fb/templates/mini_fb/update_profile_form.html -->
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<div class="update-profile-container">
+    <h2>Update Profile for {{ profile.first_name }} {{profile.last_name}} </h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="update-profile-table">
+            {{ form.as_table }}
+        </table>
+        <button type="submit" class="submit-btn">Update Profile</button>
+    </form>
+
+    <form method="GET" action="{% url 'mini_fb:show_profile_for_user' %}">
+        <button type="submit" class="cancel-btn">Cancel</button>
+    </form>
+</div>
+{% endblock %}

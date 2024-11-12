@@ -1,0 +1,34 @@
+<!-- 
+voter_analytics/templates/voter_analytics/base.html 
+-->
+
+{% load static %}
+
+<html>
+    <head>
+        <tittle> Voter Analytics | CS412 </tittle>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+
+        <header>
+            <h1>Voter Analytics</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="{% url 'voter_analytics:home' %}">Home</a></li>
+            </ul>
+        </nav>
+
+
+        {% block content %}
+
+        {% endblock %}
+
+        <footer>
+            <p>Voter Analytics Application &copy; 2024</p>
+        </footer>
+
+    </body>
+</html>

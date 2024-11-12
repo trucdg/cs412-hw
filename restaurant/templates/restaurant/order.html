@@ -1,0 +1,110 @@
+<!-- restaurant/templates/restaurant/order.html -->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<div class="order-container">
+    <h2>Order Your Favorites</h2>
+
+    <form method="POST" action="{% url 'restaurant:confirmation' %}" class="order-form">
+
+        {% csrf_token %}
+
+        <!-- Regular Dishes -->
+        <h3>Menu</h3>
+        <ul class="menu-list">
+            <li>
+                <label class="menu-item">
+                    <input type="checkbox" name="items" value="Wonton Soup"> 
+                    Wonton Soup - $8
+                </label>
+            </li>
+
+            <li>
+                <label class="menu-item">
+                    <input type="checkbox" name="items" value="Egg Rolls"> 
+                    Egg Rolls - $6
+                </label>
+            </li>
+
+            <li>
+                <label class="menu-item">
+                    <input type="checkbox" name="items" value="Beef Noodle Soup with Brisket"> 
+                    Beef Noodle Soup with Brisket - $15
+                </label>
+            </li>
+            <li>
+                <label class="menu-item special-soup">
+                    <input type="checkbox" id="special-soup" name="items" value="Special Combination Beef Noodle Soup">
+                    Special Combination Beef Noodle Soup - $16
+                </label>
+
+                <!-- Sub-list for Extra Toppings -->
+                <ul class="extra-toppings" style="display: none;">
+                    <li>
+                        <label class="extra-item">
+                            <input type="checkbox" name="extras" value="Extra Vegetables"> Add Extra Vegetables (+$2)
+                        </label>
+                    </li>
+                    <li>
+                        <label class="extra-item">
+                            <input type="checkbox" name="extras" value="Extra Meatballs"> Add Extra Meatballs (+$3)
+                        </label>
+                    </li>
+                    <li>
+                        <label class="extra-item">
+                            <input type="checkbox" name="extras" value="Extra Brisket"> Add Extra Brisket (+$4)
+                        </label>
+                    </li>
+                    <li>
+                        <label class="extra-item">
+                            <input type="checkbox" name="extras" value="Tendon"> Add Tendon (+$3)
+                        </label>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Daily Special -->
+        <h3 class="daily-special">Daily Special: {{ daily_special.name }} - ${{ daily_special.price }}</h3>
+        <label>
+            <input type="checkbox" name="daily_special" value="{{ daily_special.name }}"> Add Daily Special
+        </label>
+        <!-- Special Instructions -->
+        <h3>Special Instructions</h3>
+        <textarea name="instructions" rows="4" cols="50" class="instructions"></textarea><br>
+
+        <!-- Customer Information -->
+        <h3>Customer Information</h3>
+        <div class="customer-info">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+        </div>
+
+        <input type="submit" value="Place Order" class="submit-button">
+
+
+    </form>
+</div>
+
+<script>
+    // JavaScript to toggle extra toppings
+    const specialSoupCheckbox = document.getElementById('special-soup');
+    const extraToppings = document.querySelector('.extra-toppings');
+
+    specialSoupCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            extraToppings.style.display = 'block';
+        } else {
+            extraToppings.style.display = 'none';
+        }
+    });
+</script>
+
+{% endblock %}

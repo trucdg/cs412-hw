@@ -1,0 +1,12 @@
+<!-- quotes/templates/quotes/quote.html -->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <h2>Quote of the Day</h2>
+    <!-- Display the random image and quote -->
+    <div>
+        <img src="{{ image }}" alt="Famous Person Image">
+        <p>{{ quote }}</p>
+    </div>
+{% endblock %}

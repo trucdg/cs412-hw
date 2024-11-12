@@ -1,0 +1,32 @@
+<!-- quotes/templates/quotes/base.html 
+A template with common HTML code that will be re-used by all of the other templates 
+-->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Barack Obama Quote of the Day</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'quotes:quote' %}">Quote of the Day</a></li>
+                <li><a href="{% url 'quotes:show_all' %}">Show All Quotes</a></li>
+                <li><a href="{% url 'quotes:about' %}">About</a></li>
+            </ul>
+        </nav>
+
+        {% block content %}
+        <!-- fill in this section with specific page detail -->
+        {% endblock %}
+
+        <hr>
+        <div>
+            <p>Page created by trucdg@bu.edu</p>
+            <p>Page is generated at: {{current_time}}</p>
+         </div>
+    </body>
+</html>
