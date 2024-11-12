@@ -5,6 +5,8 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Voter
+from collections import Counter
+from django.db.models import Count
 import plotly
 import plotly.graph_objs as go
 
@@ -127,57 +129,119 @@ class GraphsListView(ListView):
         Provide context variables and graphs to use in templates
         """
         context = super().get_context_data(**kwargs)
+        context["voter_score_range"] = range(1, 6)  # Define range of voter scores
+        context["year_range"] = range(1900, 2025)
 
-        # Graph 1: Distribution of Voters by Year of Birth (Histogram)
-        birth_years = [v.date_of_birth.year for v in context["voters"]]
-        year_dist = go.Histogram(x=birth_years, nbinsx=100, name="Year of Birth")
-        year_dist_layout = go.Layout(title="Distribution of Voters by Year of Birth")
+        # get the filtered data
+        qs = self.get_queryset()
+
+        # Graph 1: Distribution of Voters by Year of Birth (Bar)
+
+        # Get all Voter records' year of birth
+        all_birth_years = qs.values_list("date_of_birth__year", flat=True)
+
+        # Count the number of voters for each year using Counter (this is a Pythonic way)
+        birth_year_counts = Counter(all_birth_years)
+
+        # Prepare the data for plotting
+        x1 = sorted(birth_year_counts.keys())  # sorted list of years
+        y1 = [birth_year_counts[year] for year in x1]  # corresponding counts
+
+        total_voters = sum(y1)
+        title1 = f"Voter Birth Year Distribution (n = {total_voters})"
+
+        # Create a bar chart
+        year_dist = go.Bar(x=x1, y=y1)
+        year_dist_layout = go.Layout(
+            title=title1,
+            xaxis=dict(title="Birth Year"),
+            yaxis=dict(title="Number of Voters"),
+            width=1000,
+            height=800,
+        )
+
+        # Convert the graph to a div
         graph_div_birth_years = plotly.offline.plot(
             {"data": [year_dist], "layout": year_dist_layout},
             auto_open=False,
             output_type="div",
         )
+
         context["graph_div_birth_years"] = graph_div_birth_years
 
-        # Graph 2: Distribution of Voters by Party Affiliation (Pie Chart)
-        # party_count = (
-        #     context["voters"]
-        #     .values("party_affiliation")
-        #     .annotate(count=Count("party_affiliation"))
-        # )
-        # labels = [party["party_affiliation"] for party in party_count]
-        # values = [party["count"] for party in party_count]
-        # party_dist = go.Pie(
-        #     labels=labels,
-        #     values=values,
-        #     title="Voter Distribution by Party Affiliation",
-        # )
-        # graph_div_party_affiliation = plotly.offline.plot(
-        #     {"data": [party_dist]}, auto_open=False, output_type="div"
-        # )
-        # context["graph_div_party_affiliation"] = graph_div_party_affiliation
+        # Graph 2: Distribution of Voters by Party Affiliation (Pie)
+
+        # Get all Voter records' party affiliations
+        all_party_affiliations = qs.values_list("party_affiliation", flat=True)
+
+        # Count the number of voters for each party using Counter
+        party_counts = Counter(all_party_affiliations)
+
+        # Prepare the data for the pie chart
+        labels = list(party_counts.keys())  # party affiliations
+        values = [party_counts[party] for party in labels]  # corresponding counts
+
+        total_voters = sum(values)
+        title2 = f"Voter Distribution by Party Affiliation (n = {total_voters})"
+
+        # Create a pie chart
+        party_dist = go.Pie(
+            labels=labels,
+            values=values,
+        )
+        party_dist_layout = go.Layout(title=title2, width=1000, height=800)
+
+        # Convert the graph to a div
+        graph_div_party_affiliation = plotly.offline.plot(
+            {"data": [party_dist], "layout": party_dist_layout},
+            auto_open=False,
+            output_type="div",
+        )
+        context["graph_div_party_affiliation"] = graph_div_party_affiliation
 
         # Graph 3: Distribution of Voters by Participation in Elections (Histogram)
-        # election_columns = [
-        #     "v20state",
-        #     "v21town",
-        #     "v21primary",
-        #     "v22general",
-        #     "v23town",
-        # ]
-        # election_participation = [
-        #     sum([getattr(v, col) for col in election_columns])
-        #     for v in context["voters"]
-        # ]
-        # election_dist = go.Histogram(
-        #     x=election_participation, nbinsx=5, name="Election Participation"
-        # )
-        # election_dist_layout = go.Layout(title="Voter Participation in Elections")
-        # graph_div_election_participation = plotly.offline.plot(
-        #     {"data": [election_dist], "layout": election_dist_layout},
-        #     auto_open=False,
-        #     output_type="div",
-        # )
-        # context["graph_div_election_participation"] = graph_div_election_participation
+
+        # Get voter participation counts for each election
+        v20state_count = qs.filter(v20state=True).count()
+        v21town_count = qs.filter(v21town=True).count()
+        v21primary_count = qs.filter(v21primary=True).count()
+        v22general_count = qs.filter(v22general=True).count()
+        v23town_count = qs.filter(v23town=True).count()
+
+        # set up the x and y data
+        x3 = [
+            "v20state",
+            "v21town",
+            "v21primary",
+            "v22general",
+            "v23town",
+        ]
+
+        y3 = [
+            v20state_count,
+            v21town_count,
+            v21primary_count,
+            v22general_count,
+            v23town_count,
+        ]
+
+        title3 = f"Voter Count by Election (n = {total_voters})"
+
+        # create the graph
+        election_dist = go.Bar(x=x3, y=y3)
+        election_dist_layout = go.Layout(
+            title=title3,
+            xaxis_title="Election",
+            yaxis_title="Number of Voters",
+            width=1000,
+            height=800,
+        )
+
+        graph_div_election_participation = plotly.offline.plot(
+            {"data": [election_dist], "layout": election_dist_layout},
+            auto_open=False,
+            output_type="div",
+        )
+        context["graph_div_election_participation"] = graph_div_election_participation
 
         return context

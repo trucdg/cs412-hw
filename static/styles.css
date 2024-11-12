@@ -1069,11 +1069,20 @@ h2 {
 .graphs {
     display: flex;
     flex-direction: column;
-    gap: 40px;
-  }
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
   
 .graph {
-    margin-bottom: 20px;
+    width: 80%;
+    max-width: 1000px; 
+    height: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
   }
   
 form table {
