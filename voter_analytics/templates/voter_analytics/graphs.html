@@ -1,0 +1,115 @@
+{% extends "voter_analytics/base.html" %}
+
+{% block title %}Voter Graphs{% endblock %}
+
+{% block content %}
+  <h2 class="page-title">Voter Data Graphs</h2>
+
+  <form method="get" action="{% url 'voter_analytics:graphs' %}" class="filter-form">
+    <fieldset>
+      <h2>Search Form</h2>
+      <table>
+        <tr>
+          <th>Party Affiliation:</th>
+          <td>
+            <select name="party_affiliation">
+              <option value="">All</option>
+              <option value="D">D - Democratic</option>
+              <option value="R">R - Republican</option>
+              <option value="CC">CC - Constitution Party</option>
+              <option value="L">L - Libertarian Party</option>
+              <option value="T">T - Tea Party</option>
+              <option value="O">O - Other</option>
+              <option value="G">G - Green Party</option>
+              <option value="J">J - Independent Party</option>
+              <option value="Q">Q - Reform Party</option>
+              <option value="FF">FF - Freedom Party</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+            <th>Minimum Birth Year:</th>
+            <td>
+              <select name="min_year_of_birth">
+                <option value="">Select Year</option>
+                {% for year in year_range %}
+                  <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Maximum Birth Year:</th>
+            <td>
+              <select name="max_year_of_birth">
+                <option value="">Select Year</option>
+                {% for year in year_range %}
+                  <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </td>
+        </tr>
+
+        <tr>
+          <th>Voter Score:</th>
+          <td>
+            <select name="voter_score">
+              <option value="">Select Score</option>
+              {% for score in voter_score_range %}
+                <option value="{{ score }}">{{ score }}</option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th>Voted in 2020 State Election:</th>
+          <td><input type="checkbox" name="v20state"></td>
+        </tr>
+
+        <tr>
+          <th>Voted in 2021 Town Election:</th>
+          <td><input type="checkbox" name="v21town"></td>
+        </tr>
+
+        <tr>
+          <th>Voted in 2021 Primary Election:</th>
+          <td><input type="checkbox" name="v21primary"></td>
+        </tr>
+
+        <tr>
+          <th>Voted in 2022 General Election:</th>
+          <td><input type="checkbox" name="v22general"></td>
+        </tr>
+
+        <tr>
+          <th>Voted in 2023 Town Election:</th>
+          <td><input type="checkbox" name="v23town"></td>
+        </tr>
+
+        <tr>
+          <td colspan="2"><input type="submit" value="Filter" class="btn-filter"></td>
+        </tr>
+      </table>
+    </fieldset>
+  </form>
+
+  <div class="graphs">
+    <div class="graph">
+      <h3>Voter Distribution by Year of Birth</h3>
+      <div>{{ graph_div_birth_years|safe }}</div>
+    </div>
+
+    <div class="graph">
+      <h3>Voter Distribution by Party Affiliation</h3>
+      <div>{{ graph_div_party_affiliation|safe }}</div>
+    </div>
+
+    <div class="graph">
+      <h3>Voter Participation in Elections</h3>
+      <div>{{ graph_div_election_participation|safe }}</div>
+    </div>
+  </div>
+{% endblock %}

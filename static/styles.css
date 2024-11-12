@@ -999,41 +999,41 @@ h2 {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
+}
 
   /* Title styling */
-  .detail-title {
+.detail-title {
     font-size: 2em;
     margin-bottom: 20px;
     color: #333;
     text-align: center;
-  }
+}
 
   /* Table styling */
-  .voter-detail-table {
+.voter-detail-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-  }
+}
 
   .voter-detail-table th, .voter-detail-table td {
     padding: 12px 15px;
     border-bottom: 1px solid #ddd;
     text-align: left;
-  }
+}
 
   .voter-detail-table th {
     font-weight: bold;
     color: #555;
     width: 40%;
-  }
+}
 
   .voter-detail-table td {
     color: #333;
-  }
+}
 
   /* Map link styling */
-  .map-link {
+.map-link {
     display: inline-block;
     text-decoration: none;
     color: #007bff;
@@ -1063,3 +1063,36 @@ h2 {
   .back-link:hover {
     background-color: #ddd;
   }
+
+
+  /*GRAPHS  */
+.graphs {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+.graph {
+    margin-bottom: 20px;
+  }
+  
+form table {
+    width: 80%;
+  }
+  
+form select, form input[type="checkbox"], form input[type="submit"] {
+    margin: 5px 0;
+  }
+  
+form .btn-filter {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    cursor: pointer;
+  }
+  
+form .btn-filter:hover {
+    background-color: #0056b3;
+  }
+  
